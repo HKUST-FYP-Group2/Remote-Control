@@ -81,7 +81,7 @@
 #endif
     #define ESP_PANEL_LCD_SPI_IO_DC             (4)
     #define ESP_PANEL_LCD_SPI_MODE              (0)     // 0/1/2/3, typically set to 0
-    #define ESP_PANEL_LCD_SPI_CLK_HZ            (40 * 1000 * 1000)
+    #define ESP_PANEL_LCD_SPI_CLK_HZ            (40 * 1000 * 100)
                                                         // Should be an integer divisor of 80M, typically set to 40M
     #define ESP_PANEL_LCD_SPI_TRANS_QUEUE_SZ    (10)    // Typically set to 10
     #define ESP_PANEL_LCD_SPI_CMD_BITS          (8)     // Typically set to 8

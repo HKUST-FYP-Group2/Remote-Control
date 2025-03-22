@@ -197,7 +197,7 @@ void create_ui(void) {
 
   // Create BLE status label
   ble_status_label = lv_label_create(ble_screen);
-  lv_label_set_text(ble_status_label, "Raspberry Pi is not connected");
+  lv_label_set_text(ble_status_label, "Projector App is not connected");
   lv_obj_set_style_text_font(ble_status_label, &lv_font_montserrat_32, 0);
   lv_obj_set_style_text_color(ble_status_label, lv_color_hex(0xFFFFFF), 0);
   lv_obj_align(ble_status_label, LV_ALIGN_CENTER, 0, 0); // Center the label

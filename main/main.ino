@@ -40,8 +40,8 @@ bool oldDeviceConnected = false;
 bool is_screen_init = false;
 uint32_t value = 0;
 
-#define SERVICE_UUID        "19b10000-e8f2-537e-4f6c-d104768a1214"
-#define CHARACTERISTIC_UUID "19b10001-e8f2-537e-4f6c-d104768a1214"
+#define SERVICE_UUID        "419d7afd-9d84-4387-bdd6-54428c9aabbb"
+#define CHARACTERISTIC_UUID "0f2441e6-7094-4561-b9c3-59f3690eb052"
 
 void update_sliders();
 
@@ -219,13 +219,15 @@ static void btn_event_cb(lv_event_t *e) {
     lv_obj_t *btn = lv_event_get_target(e);
     
     if(btn == lv_obj_get_child(home_screen, 0)) {
-        // Weather button pressed
-    }
-    else if(btn == lv_obj_get_child(home_screen, 1)) {
         lv_scr_load(brightness_screen);
     }
-    else if(btn == lv_obj_get_child(home_screen, 2)) {
+    else if(btn == lv_obj_get_child(home_screen, 1)) {
         lv_scr_load(volume_screen);
+    }
+    else if(btn == lv_obj_get_child(home_screen, 2)) {
+        String s = "bgm";
+        Characteristic->setValue(s);
+        Characteristic->notify();
     }
 }
 
@@ -251,29 +253,10 @@ void create_home_page() {
     lv_style_set_img_recolor(&img_style, lv_color_white());
     lv_style_set_img_recolor_opa(&img_style, LV_OPA_COVER);
 
-    // Weather Button
-    lv_obj_t *btn_weather = lv_btn_create(home_screen);
-    lv_obj_set_size(btn_weather, 120, 150);
-    lv_obj_align(btn_weather, LV_ALIGN_CENTER, -150, 0);
-    lv_obj_add_style(btn_weather, &btn_style, LV_PART_MAIN);
-    
-    // Weather Image
-    LV_IMG_DECLARE(weather_img);
-    lv_obj_t *img_weather = lv_img_create(btn_weather);
-    lv_img_set_src(img_weather, &weather_img);
-    lv_obj_add_style(img_weather, &img_style, LV_PART_MAIN);
-    lv_obj_align(img_weather, LV_ALIGN_CENTER, 0, -20);
-
-    // Weather Label
-    lv_obj_t *label_weather = lv_label_create(btn_weather);
-    lv_label_set_text(label_weather, "Weather");
-    lv_obj_set_style_text_font(label_weather, &lv_font_montserrat_16, 0);
-    lv_obj_align(label_weather, LV_ALIGN_CENTER, 0, 40);
-
     // Brightness Button
     lv_obj_t *btn_brightness = lv_btn_create(home_screen);
     lv_obj_set_size(btn_brightness, 120, 150);
-    lv_obj_align(btn_brightness, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_align(btn_brightness, LV_ALIGN_CENTER, -150, 0);
     lv_obj_add_style(btn_brightness, &btn_style, LV_PART_MAIN);
     
     // Brightness Image
@@ -292,7 +275,7 @@ void create_home_page() {
     // Volume Button
     lv_obj_t *btn_volume = lv_btn_create(home_screen);
     lv_obj_set_size(btn_volume, 120, 150);
-    lv_obj_align(btn_volume, LV_ALIGN_CENTER, 150, 0);
+    lv_obj_align(btn_volume, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_style(btn_volume, &btn_style, LV_PART_MAIN);
     
     // Volume Image
@@ -308,11 +291,30 @@ void create_home_page() {
     lv_obj_set_style_text_font(label_volume, &lv_font_montserrat_16, 0);
     lv_obj_align(label_volume, LV_ALIGN_CENTER, 0, 40);
 
+    // Music Button
+    lv_obj_t *btn_music = lv_btn_create(home_screen);
+    lv_obj_set_size(btn_music, 120, 150);
+    lv_obj_align(btn_music, LV_ALIGN_CENTER, 150, 0);
+    lv_obj_add_style(btn_music, &btn_style, LV_PART_MAIN);
+    
+    // Music Image
+    LV_IMG_DECLARE(music_img);
+    lv_obj_t *img_music = lv_img_create(btn_music);
+    lv_img_set_src(img_music, &music_img);
+    lv_obj_add_style(img_music, &img_style, LV_PART_MAIN);
+    lv_obj_align(img_music, LV_ALIGN_CENTER, 0, -20);
+
+    // Music Label
+    lv_obj_t *label_music = lv_label_create(btn_music);
+    lv_label_set_text(label_music, "Switch BGM");
+    lv_obj_set_style_text_font(label_music, &lv_font_montserrat_16, 0);
+    lv_obj_align(label_music, LV_ALIGN_CENTER, 0, 40);
+
     // Add event callbacks
-    lv_obj_add_event_cb(btn_weather, btn_event_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_add_event_cb(btn_brightness, btn_event_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_add_event_cb(btn_volume, btn_event_cb, LV_EVENT_CLICKED, NULL);
-
+    lv_obj_add_event_cb(btn_music, btn_event_cb, LV_EVENT_CLICKED, NULL);
+    
     lvgl_port_unlock();
 }
 
@@ -555,7 +557,7 @@ void loop() {
     oldDeviceConnected = deviceConnected;
 
     lvgl_port_lock(-1);
-    lv_label_set_text(ble_status_label, "Raspberry Pi is not connected");
+    lv_label_set_text(ble_status_label, "Projector App is not connected");
     lv_scr_load(ble_screen);
     lvgl_port_unlock();
     is_screen_init = false;
